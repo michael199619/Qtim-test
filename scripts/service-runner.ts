@@ -3,11 +3,7 @@
 import { execSync } from 'child_process';
 import { Command } from 'commander';
 
-interface MicroservicesConfig {
-    services: string[];
-}
-
-const config: MicroservicesConfig=require('./microservices.config.js');
+const services: string[]=Object.keys(require('../nest-cli.json').projects);
 
 const program=new Command();
 
@@ -50,13 +46,13 @@ program
     .description('Показать список микросов')
     .action(() => {
         console.log('Доступные:');
-        config.services.forEach((service,i) => console.log(`  ${i+1}. ${service}`));
+        services.forEach((service,i) => console.log(`  ${i+1}. ${service}`));
     });
 
 function run(command: string,service: string): void {
-    if (!config.services.includes(service)) {
+    if (!services.includes(service)) {
         console.error(`Сервис "${service}" не найден`);
-        console.log('Доступные:',config.services.join(', '));
+        console.log('Доступные:',services.join(', '));
         process.exit(1);
     }
 
@@ -80,13 +76,13 @@ function startAll(options: {
     exclude?: string;
     dryRun?: boolean;
 }): void {
-    let services=[...config.services];
+    let servs=[...services];
 
     // Фильтр
     if (options.filter) {
         const regex=new RegExp(options.filter.replace(/\*/g,'.*'));
-        services=services.filter(s => regex.test(s));
-        if (services.length===0) {
+        servs=servs.filter(s => regex.test(s));
+        if (servs.length===0) {
             console.error(`Нет сервисов по паттерну: ${options.filter}`);
             process.exit(1);
         }
@@ -95,11 +91,11 @@ function startAll(options: {
     // Исключение
     if (options.exclude) {
         const excluded=options.exclude.split(',').map(s => s.trim());
-        services=services.filter(s => !excluded.includes(s));
+        servs=servs.filter(s => !excluded.includes(s));
     }
 
     console.log(`Запуск:`);
-    services.forEach((s,i) => console.log(`  ${i+1}. ${s}`));
+    servs.forEach((s,i) => console.log(`  ${i+1}. ${s}`));
 
     // Перед массовым запуском собираем общую библиотеку
     try {
@@ -111,7 +107,7 @@ function startAll(options: {
     }
 
     const baseCommand=options.dev? 'nest start --watch':'nest start';
-    const commands=services.map(s => `${baseCommand} ${s}`);
+    const commands=servs.map(s => `${baseCommand} ${s}`);
     const cmd=`concurrently ${commands.map(c => `"${c}"`).join(' ')}`;
 
     if (options.dryRun) {

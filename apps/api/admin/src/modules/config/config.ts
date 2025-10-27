@@ -6,6 +6,7 @@ import { get } from 'env-var';
 export const appConfig=registerAs('app',() => ({
     port: get('PORT').default('3000').asPortNumber(),
     nodeEnv: get('NODE_ENV').default('development').asString(),
+    apiPrefix: get('API_PREFIX').default('api').asString()
 }));
 
 export const redisConfig=registerAs('redis',() => ({
