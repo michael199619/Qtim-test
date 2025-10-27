@@ -1,0 +1,9 @@
+export interface I<%= methodClass %>TransportOptions {
+    clientId: string;
+    kafkaBrokers: string[];
+    natsServers: string[];
+}
+
+export type I<%= methodClass %>Controller = {
+    <%= method %>(): Promise<any>;
+}

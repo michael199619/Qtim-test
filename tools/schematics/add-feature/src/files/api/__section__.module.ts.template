@@ -1,0 +1,8 @@
+import { Module } from '@nestjs/common';
+import { <%= SectionClass %>Controller } from './<%= section %>.controller';
+
+@Module({
+  controllers: [<%= SectionClass %>Controller],
+  exports: [<%= SectionClass %>Controller],
+})
+export class <%= SectionClass %>Module {}

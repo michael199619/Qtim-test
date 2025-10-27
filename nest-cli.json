@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "schematics/add-feature/collection.json",
+  "sourceRoot": "apps/api/admin/src",
+  "monorepo": true,
+  "root": "apps/api/admin",
+  "defaultProject": "admin",
+  "compilerOptions": {
+    "webpack": true
+  },
+  "projects": {
+    "admin": {
+      "type": "application",
+      "root": "apps/api/admin",
+      "entryFile": "main",
+      "sourceRoot": "apps/api/admin/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api/admin/tsconfig.app.json"
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "apps/common",
+      "entryFile": "index",
+      "sourceRoot": "apps/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/common/tsconfig.lib.json"
+      }
+    },
+    "users": {
+      "type": "application",
+      "root": "apps/microservice/users",
+      "entryFile": "main",
+      "sourceRoot": "apps/microservice/users/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/microservice/users/tsconfig.app.json"
+      }
+    },
+    "news": {
+      "type": "application",
+      "root": "apps/microservice/news",
+      "entryFile": "main",
+      "sourceRoot": "apps/microservice/news/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/microservice/news/tsconfig.app.json"
+      }
+    }
+  }
+}

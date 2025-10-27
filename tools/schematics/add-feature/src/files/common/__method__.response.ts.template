@@ -1,0 +1,4 @@
+export class <%= methodClass %>Response {
+  success: boolean;
+  data?: any;
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "usecase",
+  "title": "Usecase Options",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Usecase name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the class?"
+    },
+    "entity": {
+      "type": "string",
+      "description": "Entity name"
+    },
+    "controller": {
+      "type": "boolean",
+      "description": "Generate API controller",
+      "default": false,
+      "x-prompt": "Need to api?"
+    },
+    "common": {
+      "type": "boolean",
+      "description": "Generate dto/response",
+      "default": true,
+      "x-prompt": "Need to dto/response?"
+    },
+    "method": {
+      "type": "string",
+      "description": "Method name"
+    },
+    "index": {
+      "type": "string",
+      "description": "Index name"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

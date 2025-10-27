@@ -1,0 +1,9 @@
+{
+  "schematics": {
+    "add-feature": {
+      "description": "Добавляет контроллер, usecase, dto и response в монорепо",
+      "factory": "./dist/index#usecase",
+      "schema": "./src/schema.json"
+    }
+  }
+}

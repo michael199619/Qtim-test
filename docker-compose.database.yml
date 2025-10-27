@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  users-db:
+    image: postgres:15-alpine
+    container_name: users_db
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_DB: ${USERS_DB_NAME:-users}
+      POSTGRES_USER: ${USERS_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${USERS_DB_PASSWORD:-postgres}
+    ports:
+      - "${USERS_DB_PORT:-5433}:5432"
+    volumes:
+      - users_db_data:/var/lib/postgresql/data
+  news-db:
+    image: postgres:15-alpine
+    container_name: news_db
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_DB: ${NEWS_DB_NAME:-news}
+      POSTGRES_USER: ${NEWS_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${NEWS_DB_PASSWORD:-postgres}
+    ports:
+      - "${NEWS_DB_PORT:-5432}:5432"
+    volumes:
+      - news_db_data:/var/lib/postgresql/data
+  
+volumes:
+  users_db_data:
+  news_db_data:
+
+

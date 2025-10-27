@@ -1,0 +1,8 @@
+import { Module } from '@nestjs/common';
+import { <%= methodClass %>Usecase } from './<%= method %>.usecase';
+
+@Module({
+  providers: [<%= methodClass %>Usecase],
+  exports: [<%= methodClass %>Usecase],
+})
+export class <%= methodClass %>Module {}

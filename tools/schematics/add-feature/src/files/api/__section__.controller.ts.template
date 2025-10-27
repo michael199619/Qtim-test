@@ -1,0 +1,15 @@
+import { Controller, <%= http %> , Body } from '@nestjs/common';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { <%= methodClass %>Dto, <%= methodClass %>Response } from '@test/common';
+
+@Controller('<%= section %>')
+export class <%= SectionClass %>Controller {
+  constructor() {}
+
+  @<%= http %>('<%= method %>')
+  @ApiOperation({ description: '<%= method %> operation' })
+  @ApiResponse({ type: <%= methodClass %>Response })
+  <%= method %>(@Body() dto: <%= methodClass %>Dto): <%= methodClass %>Response {
+    return { success: true, data: dto };
+  }
+}

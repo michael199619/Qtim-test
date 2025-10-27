@@ -1,0 +1,9 @@
+import { Injectable } from '@nestjs/common';
+import { <%= methodClass %>Dto } from '@test/common';
+
+@Injectable()
+export class <%= methodClass %>Usecase {
+  execute(dto: <%= methodClass %>Dto) {
+    return { success: true, data: null };
+  }
+}

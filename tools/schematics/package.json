@@ -1,0 +1,10 @@
+{
+    "name": "schematics",
+    "version": "0.0.1",
+    "description": "Schematics",
+    "author": "Basov Michael",
+    "private": true,
+    "license": "UNLICENSED",
+    "main": "./dist/index.ts",
+    "schematics": "./collection.json"
+}

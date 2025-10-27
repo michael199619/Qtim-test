@@ -1,0 +1,62 @@
+import { ApiProperty } from "@nestjs/swagger";
+
+export enum ArticleStatus {
+  DRAFT='draft',
+  PUBLISH='publish'
+}
+
+export class GetArticleByIdResponse {
+  @ApiProperty({
+    type: Number,
+    description: 'Идентификатор статьи'
+  })
+  id: number;
+
+  @ApiProperty({
+    type: String,
+    description: 'Заголовок статьи'
+  })
+  title: string;
+
+  @ApiProperty({
+    type: String,
+    description: 'Описание статьи'
+  })
+  description: string;
+
+  @ApiProperty({
+    type: Number,
+    description: 'Идентификатор автора статьи'
+  })
+  authorId: number;
+
+  @ApiProperty({
+    type: String,
+    description: 'Имя автора статьи'
+  })
+  authorName: string;
+
+  @ApiProperty({
+    type: Date,
+    description: 'Дата публикации статьи'
+  })
+  publishedAt: Date;
+
+  @ApiProperty({
+    type: Date,
+    description: 'Дата обновления статьи'
+  })
+  updatedAt: Date;
+
+  @ApiProperty({
+    type: Date,
+    description: 'Дата создания статьи'
+  })
+  createdAt: Date;
+
+  @ApiProperty({
+    enum: ArticleStatus,
+    description: 'Статус статьи'
+  })
+  status: ArticleStatus;
+}
