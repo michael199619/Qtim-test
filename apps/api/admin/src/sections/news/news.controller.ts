@@ -19,7 +19,9 @@ export class NewsController {
     @ApiResponse({ type: GetArticlesResponse })
     async getArticles(@Query() dto: AdminGetArticlesDto) {
         return firstValueFrom(this.newsPublisher.getArticles({
-            ...dto,userId: this.ctx.userId
+            ...dto,
+            // не проверяем юзера
+            userId: this.ctx.userId
         }));
     }
 

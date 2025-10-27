@@ -16,7 +16,6 @@ export class LoginUserUsecase extends Usecase<IUserController['loginUser']> {
     }
 
     async handler(dto: LoginUserDto): Promise<LoginUserResponse> {
-        console.log(dto)
         const user=await this.usersRepository.getUserByLoginOrId(dto.login);
 
         if (!user) {

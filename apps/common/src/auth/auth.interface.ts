@@ -1,10 +1,17 @@
 import { JwtSignOptions } from '@nestjs/jwt';
 
+export enum TokenType {
+    OK='ok',
+    REVOKED='revoked',
+    INVALID_VERSION='invalid_version'
+}
+
 export interface RefreshPayload {
     sub: number;
     jti: string;
     iat?: number;
     exp?: number;
+    sessionVersion: number;
 };
 
 export enum ApiType {

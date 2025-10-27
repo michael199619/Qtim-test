@@ -52,7 +52,7 @@ export class AuthController {
   async logoutUser() {
     const res=await firstValueFrom(this.userPublisher.logoutUser({
       id: this.ctx.user.id,
-      refreshToken: this.ctx.refreshToken
+      refreshToken: this.ctx.refreshToken!
     }));
 
     this.ctx.removeTokens();
@@ -81,6 +81,7 @@ export class AuthController {
     return login;
   }
 
+  @UseGuards(AuthGuard)
   @Post('refresh-token')
   @ApiOperation({
     description: 'Обновить токен',
@@ -91,7 +92,7 @@ export class AuthController {
   async refreshTokenUser() {
     const login=await firstValueFrom(this.userPublisher.refreshTokenUser({
       id: this.ctx.userId,
-      refreshToken: this.ctx.refreshToken
+      refreshToken: this.ctx.refreshToken!
     }));
 
     this.ctx.setTokens(login);

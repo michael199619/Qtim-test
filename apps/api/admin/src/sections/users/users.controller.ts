@@ -13,7 +13,7 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Get('get-me')
-  @ApiOperation({ description: 'getMe operation' })
+  @ApiOperation({ description: 'Получить свой профиль' })
   @ApiResponse({ type: GetUserResponse })
   getMe(): GetUserResponse {
     return this.ctx.user

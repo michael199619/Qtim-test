@@ -15,7 +15,11 @@ export class ContextMiddleware implements NestMiddleware {
         this.ctx.res=res;
 
         if (this.ctx.accessToken) {
-            this.ctx.payload=await this.authService.getPayloadFromToken(this.ctx.refreshToken);
+            try {
+                this.ctx.payload=await this.authService.verifyJwtToken(this.ctx.accessToken)
+            } catch (e) {
+                console.error(e)
+            }
         }
 
         next();

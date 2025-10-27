@@ -49,11 +49,11 @@ export class ContextService {
     this.res.clearCookie('user_id');
   }
 
-  get accessToken() {
+  get accessToken(): string|undefined {
     return this.req.cookies?.['access_token']
   }
 
-  get refreshToken() {
+  get refreshToken(): string|undefined {
     return this.req.cookies?.['refresh_token']
   }
 }
