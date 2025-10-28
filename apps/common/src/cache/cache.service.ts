@@ -11,16 +11,16 @@ export class CacheService {
     @InjectRedis() private readonly redis: Redis
   ) { }
 
-  async get(id: string|number) {
+  async get(id: string) {
     const data=await this.redis.get(`${this.options.entity}:${id}`);
     return data? JSON.parse(data):null;
   }
 
-  async set(id: string|number,value: any) {
+  async set(id: string,value: any) {
     await this.redis.set(`${this.options.entity}:${id}`,JSON.stringify(value),'EX',this.options.ttl);
   }
 
-  async invalidate(id: string|number) {
+  async invalidate(id: string) {
     await this.redis.del(`${this.options.entity}:${id}`);
   }
 }

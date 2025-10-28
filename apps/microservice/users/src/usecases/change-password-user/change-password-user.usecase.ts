@@ -1,5 +1,5 @@
 import { ForbiddenException,Injectable } from '@nestjs/common';
-import { AuthService,ChangePasswordUserDto,ChangePasswordUserResponse,IUserController,PasswordHasher,Usecase } from "@test/common";
+import { AuthService,ChangePasswordUserDto,ChangePasswordUserResponse,IUserController,Usecase } from "@test/common";
 import { UsersRepository } from '../../db/users/users.repository';
 
 @Injectable()
@@ -18,11 +18,11 @@ export class ChangePasswordUserUsecase extends Usecase<IUserController['changePa
   public async handler(dto: ChangePasswordUserDto): Promise<ChangePasswordUserResponse> {
     const user=await this.userRepository.getUserByLoginOrId(dto.id);
 
-    if (!user||!await PasswordHasher.verify(dto.oldPassword,user.password)) {
+    if (!user||!await this.authService.verifyBcrypt(dto.oldPassword,user.password)) {
       throw new ForbiddenException();
     }
 
-    const hash=await PasswordHasher.getHashPassword(dto.newPassword);
+    const hash=await this.authService.getBcryptHashPassword(dto.newPassword);
     await this.userRepository.changePasswordUser(dto.id,hash);
 
     await this.authService.logoutAll(user.id);

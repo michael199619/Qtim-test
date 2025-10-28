@@ -8,7 +8,8 @@ class GetArticles extends OmitType(GetArticleByIdResponse,['description']) {
 
 export class GetArticlesResponse extends PaginationResponse<GetArticles> {
   @ApiProperty({
-    type: [GetArticles],
+    type: GetArticles,
+    isArray: true,
     description: 'Статьи'
   })
   data: GetArticles[];

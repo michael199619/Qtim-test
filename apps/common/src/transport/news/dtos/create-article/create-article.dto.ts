@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt,IsNotEmpty,IsString } from "class-validator";
+import { IsNotEmpty,IsString,IsUUID } from "class-validator";
+import { randomUUID } from "crypto";
 
 export class CreateArticleDto {
   @ApiProperty({
@@ -19,9 +20,10 @@ export class CreateArticleDto {
   description: string;
 
   @ApiProperty({
-    type: Number,
-    description: 'Идентификатор автора статьи'
+    type: String,
+    description: 'Идентификатор автора статьи',
+    example: randomUUID()
   })
-  @IsInt()
-  authorId: number;
+  @IsUUID()
+  authorId: string;
 }

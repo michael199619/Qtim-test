@@ -7,8 +7,8 @@ enum ArticleStatus {
 
 @Entity('article')
 export class Article {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({ type: 'varchar',select: false })
     title: string;
@@ -16,8 +16,8 @@ export class Article {
     @Column({ type: 'text' })
     description: string;
 
-    @Column({ type: 'numeric' })
-    authorId: number;
+    @Column({ type: 'uuid' })
+    authorId: string;
 
     @Column({ type: 'date',nullable: true })
     publishedAt: Date;

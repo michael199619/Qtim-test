@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { BaseRepository,CreateUserDto,EditUserDto,GetUsersDto } from "@test/common";
 import { DataSource,FindOptionsWhere,In } from "typeorm";
+import { validate as isValidUUID } from 'uuid';
 import { User } from "../entities/User.entity";
 
 @Injectable()
@@ -20,6 +21,7 @@ export class UsersRepository extends BaseRepository<User> {
         }
 
         const [articles,total]=await this.findAndCount({
+            select: ['id','name'],
             skip,
             take,
             where
@@ -28,17 +30,17 @@ export class UsersRepository extends BaseRepository<User> {
         return this.paginationResponse({ data: articles,total,take,page: dto.page });
     }
 
-    getUserById(id: number) {
+    getUserById(id: string) {
         return this.findOne({ select: ['id','login','name'],where: { id } })
     }
 
-    getUserByLoginOrId(str: string|number) {
+    getUserByLoginOrId(str: string) {
         const where: FindOptionsWhere<User>={};
 
-        if (typeof str==='number') {
-            where.id=str
-        } else {
+        if (!isValidUUID(str)) {
             where.login=str
+        } else {
+            where.id=str
         }
 
         return this.findOne({ select: ['id','password'],where })
@@ -52,7 +54,7 @@ export class UsersRepository extends BaseRepository<User> {
         })
     }
 
-    async removeUserById(id: number) {
+    async removeUserById(id: string) {
         await this.softDelete(id)
     }
 
@@ -62,7 +64,7 @@ export class UsersRepository extends BaseRepository<User> {
         })
     }
 
-    changePasswordUser(id: number,password: string) {
+    changePasswordUser(id: string,password: string) {
         return this.update(id,{
             password
         })

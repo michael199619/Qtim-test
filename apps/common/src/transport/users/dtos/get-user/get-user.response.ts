@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsUUID } from "class-validator";
 import { randomUUID } from "crypto";
 
 export class GetUserResponse {
@@ -7,7 +8,8 @@ export class GetUserResponse {
         description: 'Идентификатор пользователя',
         example: randomUUID()
     })
-    id: number;
+    @IsUUID()
+    id: string;
 
     @ApiProperty({
         type: String,

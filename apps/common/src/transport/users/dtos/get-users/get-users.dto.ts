@@ -1,15 +1,16 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray,IsInt } from "class-validator";
+import { IsArray,IsOptional,IsUUID } from "class-validator";
 import { PaginationDto } from "../../../../utils";
 
 export class GetUsersDto extends PaginationDto {
   @ApiProperty({
-    type: Number,
+    type: String,
     isArray: true,
     required: false,
-    description: 'Список дентификаторов пользователей',
+    description: 'Список идентификаторов пользователей',
   })
-  @IsInt({ each: true })
+  @IsOptional()
+  @IsUUID(undefined,{ each: true })
   @IsArray()
-  ids: number[];
+  ids: string[]=[];
 }

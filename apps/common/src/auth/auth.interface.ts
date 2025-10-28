@@ -7,7 +7,7 @@ export enum TokenType {
 }
 
 export interface RefreshPayload {
-    sub: number;
+    sub: string;
     jti: string;
     iat?: number;
     exp?: number;

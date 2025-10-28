@@ -1,12 +1,14 @@
 import { ApiProperty,PickType } from "@nestjs/swagger";
-import { IsInt } from "class-validator";
+import { IsUUID } from "class-validator";
+import { randomUUID } from "crypto";
 import { CreateArticleDto } from "../create-article";
 
 export class EditArticleDto extends PickType(CreateArticleDto,['title','description']) {
   @ApiProperty({
-    type: Number,
-    description: 'Идентификатор статьи'
+    type: String,
+    description: 'Идентификатор статьи',
+    example: randomUUID()
   })
-  @IsInt()
-  id: number;
+  @IsUUID()
+  id: string;
 }

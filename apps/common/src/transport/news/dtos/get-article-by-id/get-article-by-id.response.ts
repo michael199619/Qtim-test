@@ -7,10 +7,10 @@ export enum ArticleStatus {
 
 export class GetArticleByIdResponse {
   @ApiProperty({
-    type: Number,
+    type: String,
     description: 'Идентификатор статьи'
   })
-  id: number;
+  id: string;
 
   @ApiProperty({
     type: String,
@@ -25,10 +25,10 @@ export class GetArticleByIdResponse {
   description: string;
 
   @ApiProperty({
-    type: Number,
+    type: String,
     description: 'Идентификатор автора статьи'
   })
-  authorId: number;
+  authorId: string;
 
   @ApiProperty({
     type: String,

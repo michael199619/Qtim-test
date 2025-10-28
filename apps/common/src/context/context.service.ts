@@ -22,11 +22,7 @@ export class ContextService {
   }
 
   get userId() {
-    if (!this._payload) {
-      throw new NotFoundException();
-    }
-
-    return +this._payload.sub
+    return this._payload?.sub
   }
 
   set user(session: GetUserResponse) {

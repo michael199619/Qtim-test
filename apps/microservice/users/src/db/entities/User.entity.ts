@@ -2,8 +2,8 @@ import { Column,CreateDateColumn,DeleteDateColumn,Entity,PrimaryGeneratedColumn,
 
 @Entity('user')
 export class User {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({ type: 'varchar',select: false })
     password: string;

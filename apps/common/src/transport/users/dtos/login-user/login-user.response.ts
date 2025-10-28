@@ -1,11 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsUUID } from "class-validator";
 
 export class LoginUserResponse {
     @ApiProperty({
-        type: Number,
-        description: 'Идентификатор пользователя'
+        type: String,
+        description: 'Идентификатор пользователя',
     })
-    userId: number;
+    @IsUUID()
+    userId: string;
 
     @ApiProperty({
         type: String,

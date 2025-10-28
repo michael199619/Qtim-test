@@ -1,11 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt } from "class-validator";
+import { IsUUID } from "class-validator";
+import { randomUUID } from "crypto";
 
 export class RemoveUserDto {
     @ApiProperty({
-        type: Number,
-        description: 'Идентификатор пользователя',
+        type: String,
+        description: 'Идентификатор статьи',
+        example: randomUUID()
     })
-    @IsInt()
-    id: number;
+    @IsUUID()
+    id: string;
 }

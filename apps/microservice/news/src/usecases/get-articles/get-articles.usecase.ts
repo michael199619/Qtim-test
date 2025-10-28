@@ -18,7 +18,7 @@ export class GetArticlesUsecase extends Usecase<INewsController['getArticles']> 
 
   async handler(dto: GetArticlesDto): Promise<GetArticlesResponse> {
     const { data,...pagination }=await this.articlesRepository.getArticles(dto);
-    const userIds=new Set<number>();
+    const userIds=new Set<string>();
 
     data.forEach((article) => userIds.add(article.authorId));
 

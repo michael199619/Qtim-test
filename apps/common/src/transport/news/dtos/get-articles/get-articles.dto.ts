@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import { IsEnum,IsInt,IsOptional,IsString } from "class-validator";
+import { IsEnum,IsOptional,IsString,IsUUID } from "class-validator";
+import { randomUUID } from "crypto";
 import { PaginationDto } from "../../../../utils/pagination";
 import { ArticleStatus } from "../get-article-by-id";
 
@@ -17,19 +18,21 @@ export class GetArticlesDto extends PaginationDto {
   @ApiProperty({
     type: String,
     required: false,
-    description: 'Идентификатор пользователя'
+    description: 'Идентификатор пользователя',
+    example: randomUUID()
   })
-  @IsInt()
+  @IsUUID()
   @IsOptional()
-  userId?: number;
+  userId?: string;
 
   @ApiProperty({
     type: String,
     required: false,
     description: 'Идентификатор автора статьи'
   })
+  @IsUUID()
   @IsOptional()
-  authorId?: number;
+  authorId?: string;
 
   @ApiProperty({
     type: String,

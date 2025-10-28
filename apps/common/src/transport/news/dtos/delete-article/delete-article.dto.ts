@@ -1,11 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt } from "class-validator";
+import { IsUUID } from "class-validator";
+import { randomUUID } from "crypto";
 
 export class DeleteArticleDto {
   @ApiProperty({
-    type: Number,
-    description: 'Идентификатор статьи'
+    type: String,
+    description: 'Идентификатор статьи',
+    example: randomUUID()
   })
-  @IsInt()
-  id: number;
+  @IsUUID()
+  id: string;
 }

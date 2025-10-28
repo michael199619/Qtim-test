@@ -73,7 +73,7 @@ export class AuthController {
   ) {
     const login=await firstValueFrom(this.userPublisher.changePasswordUser({
       ...dto,
-      id: this.ctx.userId
+      id: this.ctx.userId!
     }));
 
     this.ctx.setTokens(login);
@@ -91,7 +91,7 @@ export class AuthController {
   })
   async refreshTokenUser() {
     const login=await firstValueFrom(this.userPublisher.refreshTokenUser({
-      id: this.ctx.userId,
+      id: this.ctx.userId!,
       refreshToken: this.ctx.refreshToken!
     }));
 

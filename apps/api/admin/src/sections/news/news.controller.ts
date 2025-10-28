@@ -1,9 +1,9 @@
-import { Body,Controller,Delete,Get,Param,Post,Put,Query,UseGuards } from '@nestjs/common';
+import { Body,Controller,Delete,Get,Param,ParseUUIDPipe,Post,Put,Query,UseGuards } from '@nestjs/common';
 import { ApiOperation,ApiResponse,ApiTags } from '@nestjs/swagger';
-import { CacheService,ContextService,CreateArticleResponse,DeleteArticleResponse,EditArticleDto,EditArticleResponse,GetArticleByIdResponse,GetArticlesResponse,NewsPublisher,PublishArticleByIdResponse } from '@test/common';
+import { CacheService,ContextService,CreateArticleResponse,DeleteArticleResponse,EditArticleResponse,GetArticleByIdResponse,GetArticlesResponse,NewsPublisher,PublishArticleByIdResponse } from '@test/common';
 import { firstValueFrom } from 'rxjs';
 import { AuthGuard } from '../../modules/auth/auth.guard';
-import { AdminCreateArticleDto,AdminGetArticlesDto } from './news.dto';
+import { AdminCreateArticleDto,AdminEditArticleDto,AdminGetArticlesDto } from './news.dto';
 
 @ApiTags('Статьи')
 @Controller('news')
@@ -29,7 +29,7 @@ export class NewsController {
     @ApiOperation({ description: 'Получить статью' })
     @ApiResponse({ type: GetArticleByIdResponse })
     async getArticleById(
-        @Param('id') id: number
+        @Param('id',ParseUUIDPipe) id: string
     ) {
         const article=await this.cacheService.get(id);
 
@@ -45,7 +45,7 @@ export class NewsController {
     @ApiOperation({ description: 'Удалить статью' })
     @ApiResponse({ type: DeleteArticleResponse })
     deleteArticle(
-        @Param('id') id: number
+        @Param('id',ParseUUIDPipe) id: string
     ) {
         return firstValueFrom(this.newsPublisher.deleteArticle({ id }));
     }
@@ -55,8 +55,8 @@ export class NewsController {
     @ApiOperation({ description: 'Отредактировать статью' })
     @ApiResponse({ type: EditArticleResponse })
     editArticle(
-        @Param('id') id: number,
-        @Body() dto: EditArticleDto
+        @Param('id',ParseUUIDPipe) id: string,
+        @Body() dto: AdminEditArticleDto
     ) {
         return firstValueFrom(this.newsPublisher.editArticle({ ...dto,id }));
     }
@@ -68,14 +68,14 @@ export class NewsController {
     createArticle(
         @Body() dto: AdminCreateArticleDto
     ) {
-        return firstValueFrom(this.newsPublisher.createArticle({ ...dto,authorId: this.ctx.userId }));
+        return firstValueFrom(this.newsPublisher.createArticle({ ...dto,authorId: this.ctx.userId! }));
     }
 
     @Put(':id/publish')
     @ApiOperation({ description: 'Опубликовать статью' })
     @ApiResponse({ type: PublishArticleByIdResponse })
     publishArticleById(
-        @Param('id') id: number
+        @Param('id',ParseUUIDPipe) id: string
     ) {
         return firstValueFrom(this.newsPublisher.publishArticleById({ id }));
     }

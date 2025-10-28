@@ -11,7 +11,7 @@ export class ArticlesRepository extends BaseRepository<Article> {
         super(datasoure,Article)
     }
 
-    getArticleById(id: number) {
+    getArticleById(id: string) {
         return this.findOne({ select: ['id','title','description','publishedAt','createdAt','authorId','updatedAt'],where: { id } })
     }
 
@@ -24,14 +24,14 @@ export class ArticlesRepository extends BaseRepository<Article> {
         })
     }
 
-    publishArticleById(id: number) {
+    publishArticleById(id: string) {
         return this.update(id,{
             status: ArticleStatus.PUBLISH,
             publishedAt: new Date()
         })
     }
 
-    async deleteArticle(id: number) {
+    async deleteArticle(id: string) {
         await this.delete(id)
     }
 

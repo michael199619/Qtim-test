@@ -8,7 +8,8 @@ class GetUser extends PickType(GetUserResponse,['id','name']) {
 
 export class GetUsersResponse extends PaginationResponse<GetUser> {
   @ApiProperty({
-    type: Number,
+    type: GetUser,
+    isArray: true,
     description: 'Список пользователей',
   })
   data: GetUser[];

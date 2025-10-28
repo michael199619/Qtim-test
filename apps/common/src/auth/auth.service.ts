@@ -1,7 +1,7 @@
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { ForbiddenException,Inject,Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PasswordHasher } from '@test/common';
+import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import Redis from 'ioredis';
 import { AUTH_OPTIONS } from './auth.constants';
@@ -15,36 +15,40 @@ export class AuthService {
         @InjectRedis() private readonly redis: Redis
     ) { }
 
-    private refreshKey(userId: number,jti: string) {
+    private refreshKey(userId: string,jti: string) {
         return `auth:${this.options.apiType}:refresh:${userId}:${jti}`;
     }
 
-    private accessRevokeKey(userId: number,jti: string) {
+    private accessRevokeKey(userId: string,jti: string) {
         return `auth:${this.options.apiType}:access-revoked:${userId}:${jti}`;
     }
 
-    private sessionVersionKey(userId: number) {
+    private sessionVersionKey(userId: string) {
         return `auth:${this.options.apiType}:session-version:${userId}`;
     }
 
-    private async getSessionVersion(userId: number): Promise<number> {
+    private async getSessionVersion(userId: string): Promise<number> {
         const version=await this.redis.get(this.sessionVersionKey(userId));
         return version? Number(version):1;
     }
 
-    private getHashPassword(token: string) {
-        return PasswordHasher.getHashPassword(token);
+    public verifyBcrypt(password: string,hash: string): Promise<boolean> {
+        return bcrypt.compare(password,hash);
     }
 
-    private async saveRefreshHash(userId: number,jti: string,token: string,exp: number) {
-        const hash=await this.getHashPassword(token);
+    public getBcryptHashPassword(str: string,salt: number=10) {
+        return bcrypt.hash(str,salt);
+    }
+
+    private async saveRefreshHash(userId: string,jti: string,token: string,exp: number) {
+        const hash=await this.getBcryptHashPassword(token);
         const ttlSec=Math.max(1,exp-Math.floor(Date.now()/1000));
         const key=this.refreshKey(userId,jti);
         await this.redis.set(key,hash,'EX',ttlSec);
     }
 
     private async verify(password: string,hash: string) {
-        if (!await PasswordHasher.verify(password,hash)) {
+        if (!await this.verifyBcrypt(password,hash)) {
             throw new ForbiddenException();
         }
     }
@@ -53,7 +57,7 @@ export class AuthService {
         return this.jwt.verifyAsync<RefreshPayload>(token);
     }
 
-    async login(userId: number,password: string,hash: string) {
+    async login(userId: string,password: string,hash: string) {
         await this.verify(password,hash);
         const { accessToken,refreshToken,payload: { jti,exp } }=await this.signTokens(userId);
 
@@ -61,7 +65,7 @@ export class AuthService {
         return { accessToken,refreshToken,userId };
     }
 
-    async refresh(userId: number,refreshToken: string) {
+    async refresh(userId: string,refreshToken: string) {
         let payload: RefreshPayload;
 
         try {
@@ -96,7 +100,7 @@ export class AuthService {
         return { ...tokens,userId };
     }
 
-    async logout(userId: number,refreshToken: string) {
+    async logout(userId: string,refreshToken: string) {
         try {
             const { sub,jti,exp }=await this.verifyJwtToken(refreshToken);
             const ttlSec=Math.max(1,exp!-Math.floor(Date.now()/1000));
@@ -114,7 +118,7 @@ export class AuthService {
         }
     }
 
-    async logoutAll(userId: number) {
+    async logoutAll(userId: string) {
         const pattern=this.refreshKey(userId,'*');
 
         const keys=await this.redis.keys(pattern);
@@ -128,7 +132,7 @@ export class AuthService {
         return newVersion;
     }
 
-    async validateAccess(userId: number,jti: string,sessionVersion: number|undefined) {
+    async validateAccess(userId: string,jti: string,sessionVersion: number|undefined) {
         const script=`
             local revoked = redis.call("GET", KEYS[1])
             local version = redis.call("GET", KEYS[2])
@@ -158,7 +162,7 @@ export class AuthService {
         return result as TokenType;
     }
 
-    private async signTokens(userId: number) {
+    private async signTokens(userId: string) {
         const jti=randomUUID();
         const sessionVersion=await this.getSessionVersion(userId);
         const payload: RefreshPayload={ sub: userId,jti,sessionVersion };
