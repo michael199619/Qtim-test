@@ -12,7 +12,7 @@ import { DeleteArticleUsecase } from './delete-article.usecase';
       inject: [articleCacheConfig.KEY],
       useFactory(config: ConfigType<typeof articleCacheConfig>) {
         return {
-          ttl: 500,
+          ttl: config.ttl,
           entity: CacheEntity.ARTICLE
         }
       }
