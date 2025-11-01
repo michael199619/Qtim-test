@@ -16,6 +16,9 @@ export class Article {
     @Column({ type: 'text' })
     description: string;
 
+    @Column({ type: 'text',default: '' })
+    content: string;
+
     @Column({ type: 'uuid' })
     authorId: string;
 

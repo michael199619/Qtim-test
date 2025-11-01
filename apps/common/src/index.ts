@@ -9,4 +9,5 @@ export * from './utils';
 export * from './cache';
 export * from './context';
 export * from './db';
+export * from './sanitize';
 

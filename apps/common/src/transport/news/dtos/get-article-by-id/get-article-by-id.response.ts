@@ -26,6 +26,12 @@ export class GetArticleByIdResponse {
 
   @ApiProperty({
     type: String,
+    description: 'Контент статьи'
+  })
+  content: string;
+
+  @ApiProperty({
+    type: String,
     description: 'Идентификатор автора статьи'
   })
   authorId: string;

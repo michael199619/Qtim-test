@@ -1,12 +1,13 @@
 import { HttpStatus,Injectable,NotFoundException } from '@nestjs/common';
-import { CacheService,EditArticleDto,EditArticleResponse,INewsController,Usecase } from '@test/common';
+import { CacheService,EditArticleDto,EditArticleResponse,INewsController,SanitizeService,Usecase } from '@test/common';
 import { ArticlesRepository } from '../../db/articles/articles.repository';
 
 @Injectable()
 export class EditArticleUsecase extends Usecase<INewsController['editArticle']> {
   constructor(
     private readonly articlesRepository: ArticlesRepository,
-    private readonly cacheService: CacheService
+    private readonly cacheService: CacheService,
+    private readonly sanitizeService: SanitizeService
   ) {
     super()
   }
@@ -20,8 +21,12 @@ export class EditArticleUsecase extends Usecase<INewsController['editArticle']> 
       throw new NotFoundException()
     }
 
+    const content=this.sanitizeService.sanitize(dto.content);
+
     await Promise.all([
-      this.articlesRepository.editArticle(dto),
+      this.articlesRepository.editArticle({
+        ...dto,content
+      }),
       this.cacheService.invalidate(dto.id)
     ]);
 

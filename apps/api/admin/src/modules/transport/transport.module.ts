@@ -9,16 +9,16 @@ import { ConfigurationModule } from '../config/config.module';
     imports: [
         ConfigurationModule,
         UsersTransportModule.register({
-            useFactory: (configKafa: ConfigType<typeof kafkaConfig>,configNats: ConfigType<typeof natsConfig>) => ({
-                kafkaBrokers: configKafa.brokers,
+            useFactory: (configKafka: ConfigType<typeof kafkaConfig>,configNats: ConfigType<typeof natsConfig>) => ({
+                kafkaBrokers: configKafka.brokers,
                 natsServers: configNats.servers,
                 clientId: SERVICE_ID
             }),
             inject: [kafkaConfig.KEY,natsConfig.KEY]
         }),
         NewsTransportModule.register({
-            useFactory: (configKafa: ConfigType<typeof kafkaConfig>,configNats: ConfigType<typeof natsConfig>) => ({
-                kafkaBrokers: configKafa.brokers,
+            useFactory: (configKafka: ConfigType<typeof kafkaConfig>,configNats: ConfigType<typeof natsConfig>) => ({
+                kafkaBrokers: configKafka.brokers,
                 natsServers: configNats.servers,
                 clientId: SERVICE_ID
             }),

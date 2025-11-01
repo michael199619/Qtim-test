@@ -12,7 +12,7 @@ export class ArticlesRepository extends BaseRepository<Article> {
     }
 
     getArticleById(id: string) {
-        return this.findOne({ select: ['id','title','description','publishedAt','createdAt','authorId','updatedAt'],where: { id } })
+        return this.findOne({ select: ['id','title','description','publishedAt','createdAt','authorId','updatedAt','content'],where: { id } })
     }
 
     createArticle(dto: CreateArticleDto) {
@@ -20,6 +20,7 @@ export class ArticlesRepository extends BaseRepository<Article> {
             title: dto.title,
             description: dto.description,
             authorId: dto.authorId,
+            content: dto.content,
             status: ArticleStatus.DRAFT
         })
     }
@@ -39,6 +40,7 @@ export class ArticlesRepository extends BaseRepository<Article> {
         return this.update(dto.id,{
             title: dto.title,
             description: dto.description,
+            content: dto.content
         })
     }
 

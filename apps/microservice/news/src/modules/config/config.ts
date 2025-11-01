@@ -2,6 +2,7 @@ import { registerAs } from '@nestjs/config';
 import { get } from 'env-var';
 
 export const appConfig=registerAs('app',() => ({
+    host: get('HOST').default('localhost').asString(),
     port: get('PORT').default('3000').asPortNumber(),
     nodeEnv: get('NODE_ENV').default('development').asString(),
 }));

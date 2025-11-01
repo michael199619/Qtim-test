@@ -21,6 +21,15 @@ export class CreateArticleDto {
 
   @ApiProperty({
     type: String,
+    description: 'Безопасный контент статьи',
+    example: '<p> test </p>'
+  })
+  @IsString()
+  @IsNotEmpty()
+  content: string;
+
+  @ApiProperty({
+    type: String,
     description: 'Идентификатор автора статьи',
     example: randomUUID()
   })
