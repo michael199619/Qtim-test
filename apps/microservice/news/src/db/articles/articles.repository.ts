@@ -15,14 +15,14 @@ export class ArticlesRepository extends BaseRepository<Article> {
         return this.findOne({ select: ['id','title','description','publishedAt','createdAt','authorId','updatedAt','content'],where: { id } })
     }
 
-    createArticle(dto: CreateArticleDto) {
+    createArticle(dto: CreateArticleDto): Promise<Article> {
         return this.save({
             title: dto.title,
             description: dto.description,
             authorId: dto.authorId,
             content: dto.content,
             status: ArticleStatus.DRAFT
-        })
+        });
     }
 
     publishArticleById(id: string) {

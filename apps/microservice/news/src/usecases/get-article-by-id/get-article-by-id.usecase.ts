@@ -18,7 +18,6 @@ export class GetArticleByIdUsecase extends Usecase<INewsController['getArticleBy
   }
 
   async handler(dto: GetArticleByIdDto): Promise<GetArticleByIdResponse> {
-    console.log(dto)
     const article=await this.articlesRepository.getArticleById(dto.id);
 
     if (!article) {

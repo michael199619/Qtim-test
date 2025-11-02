@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateArticleDto,CreateArticleResponse,INewsController,SanitizeService,Usecase } from '@test/common';
+import { CreateArticleDto,CreateArticleResponse,INewsController,SanitizeService,Usecase,UserPublisher } from '@test/common';
+import { firstValueFrom } from 'rxjs';
 import { ArticlesRepository } from '../../db/articles/articles.repository';
 
 @Injectable()
 export class CreateArticleUsecase extends Usecase<INewsController['createArticle']> {
   constructor(
     private readonly articlesRepository: ArticlesRepository,
-    private readonly sanitizeService: SanitizeService
+    private readonly sanitizeService: SanitizeService,
+    private readonly userPublisher: UserPublisher
   ) {
     super()
   }
@@ -15,10 +17,18 @@ export class CreateArticleUsecase extends Usecase<INewsController['createArticle
   }
 
   async handler(dto: CreateArticleDto): Promise<CreateArticleResponse> {
+    const user=await firstValueFrom(this.userPublisher.getUser({ id: dto.authorId }))
+
     const content=this.sanitizeService.sanitize(dto.content);
-    return await this.articlesRepository.createArticle({
+
+    const article=await this.articlesRepository.createArticle({
       ...dto,
-      content
+      content,
     });
+
+    return {
+      ...article,
+      authorName: user.name
+    }
   }
 }
